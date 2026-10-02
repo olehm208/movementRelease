@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   movementVelocity: 8
-  jumpForce: 12
+  jumpForce: 6
   amountOfJumps: 1
   fallGravityMultiplier: 2.5
   groundCheckRadius: 0.3
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
