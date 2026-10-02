@@ -6,9 +6,11 @@ public class PlayerData : ScriptableObject
     [Header("Рух (Movement)")]
     [Tooltip("Базова швидкість переміщення гравця")]
     public float movementVelocity = 8f;
-[Header("Стрибок (Jump)")]
+    [Header("Стрибок (Jump)")]
     [Tooltip("Сила, з якою гравець відштовхується від землі")]
     public float jumpForce = 12f;
+    [Tooltip("Опір в повітрі, впливає на те чи можна рухатись туди сюди")]
+    public float airControl = 2f;
     [Tooltip("Кількість можливих стрибків (наприклад, 2 для подвійного стрибка)")]
     public int amountOfJumps = 1;
     [Tooltip("Множник гравітації при падінні (щоб падіння було швидшим за стрибок)")]
