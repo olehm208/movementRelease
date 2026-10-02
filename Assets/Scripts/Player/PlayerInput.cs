@@ -2,14 +2,21 @@ using UnityEngine;
 
 public class PlayerInput: MonoBehaviour
 {
-    public float normalizedInputX { get; set; }
-    public bool JumpInput { get; set; }
+    public float normalizedInputX { get; private set; }
+    public float normalizedInputY { get; private set; }
+    public bool JumpInput { get; private set; }
+    public bool isCrouching { get; private set; }
 
-    void Update()
+void Update()
     {
         normalizedInputX = Input.GetAxisRaw("Horizontal");
+        normalizedInputY = Input.GetAxisRaw("Vertical");
+        
+        // Якщо гравець тисне стрілку вниз або 'S' (значення Y стає від'ємним)
+        isCrouching = normalizedInputY < -0.5f;
 
-        if (Input.GetAxisRaw("Jump") > 0)
+        // Зчитуємо стрибок ТІЛЬКИ в момент натискання кнопки
+        if (Input.GetButtonDown("Jump"))
         {
             JumpInput = true;
         }
