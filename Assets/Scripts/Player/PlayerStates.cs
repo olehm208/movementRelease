@@ -21,18 +21,51 @@ public class PlayerIdleState : PlayerState
             stateMachine.ChangeState(player.WalkState);
         }
     }
+
+    public override void PhysicsUpdate()
+    {
+        base.PhysicsUpdate();
+
+        // Плавно зменшуємо горизонтальну швидкість до 0
+        float newSpeedX = Mathf.MoveTowards(
+            player.Rigidbody.linearVelocity.x,
+            0f,
+            player.data.groundDeceleration * Time.fixedDeltaTime
+        );
+
+        player.Rigidbody.linearVelocity = new Vector2(newSpeedX, player.Rigidbody.linearVelocity.y);
+    }
 }
 
 // Стан стрибка
 public class PlayerJumpState : PlayerState
 {
+    // Скільки стрибків ще можна зробити до приземлення
+    private int jumpsLeft;
+
     public PlayerJumpState(PlayerController player, PlayerStateMachine stateMachine)
-        : base(player, stateMachine) { }
+        : base(player, stateMachine)
+    {
+        ResetJumps();
+    }
+
+    public void ResetJumps()
+    {
+        jumpsLeft = player.data.amountOfJumps;
+    }
 
     public override void Enter()
     {
         base.Enter();
-        player.Rigidbody.AddForce(Vector3.up * player.data.jumpForce, ForceMode2D.Impulse);
+        jumpsLeft--;
+
+        // Задаємо вертикальну швидкість напряму, а не через AddForce:
+        // 1) кожен стрибок однаковий, навіть якщо гравець уже падає;
+        // 2) швидкість змінюється одразу, а не на наступному кроці фізики.
+        player.Rigidbody.linearVelocity = new Vector2(
+            player.Rigidbody.linearVelocity.x,
+            player.data.jumpForce
+        );
     }
 
     public override void LogicUpdate()
@@ -40,14 +73,25 @@ public class PlayerJumpState : PlayerState
         base.LogicUpdate();
 
         // Захист від фантомного стрибка
-        if(player.InputHandler.JumpInput)
+        // Якщо стрибки ще лишилися — це стрибок у повітрі (Double Jump)
+        if (player.InputHandler.JumpInput)
         {
             player.InputHandler.UseJumpInput();
+
+            if (jumpsLeft > 0)
+            {
+                // Перезапуск стану -> Exit() і Enter() -> новий поштовх
+                stateMachine.ChangeState(player.JumpState);
+                return;
+            }
         }
 
         // При приземленні повертаємося в Idle або Walk
         if (player.IsGrounded && player.Rigidbody.linearVelocity.y <= 0)
         {
+            // Після приземлення знову доступні всі стрибки
+            ResetJumps();
+
             // Якщо гравець продовжує тиснути кнопку руху — переходимо в біг
             if (Mathf.Abs(player.InputHandler.normalizedInputX) > 0.01f)
             {
@@ -69,11 +113,26 @@ public class PlayerJumpState : PlayerState
         float targetSpeedX = player.InputHandler.normalizedInputX * player.data.movementVelocity;
 
         // 2. Згладжуємо швидкість для ефекту інерції (air control)
-        float smoothedSpeedX = Mathf.Lerp(
-            player.Rigidbody.linearVelocity.x,
-            targetSpeedX,
-            player.data.airControl * Time.fixedDeltaTime
-        );
+        float smoothedSpeedX;
+
+        // якщо кнопка руху натиснута — керування через airControl, як раніше
+        if (Mathf.Abs(player.InputHandler.normalizedInputX) > 0.01f)
+        {
+            smoothedSpeedX = Mathf.Lerp(
+                player.Rigidbody.linearVelocity.x,
+                targetSpeedX,
+                player.data.airControl * Time.fixedDeltaTime
+            );
+        }
+        // якщо кнопку відпущено — плавно гасимо інерцію через airDeceleration
+        else
+        {
+            smoothedSpeedX = Mathf.MoveTowards(
+                player.Rigidbody.linearVelocity.x,
+                0f,
+                player.data.airDeceleration * Time.fixedDeltaTime
+            );
+        }
 
         // 3. Застосовуємо обчислену швидкість до гравця
         player.Rigidbody.linearVelocity = new Vector2(
