@@ -8,6 +8,8 @@ public class PlayerData : ScriptableObject
     public float movementVelocity = 8f;
     [Tooltip("Як швидко гравець зупиняється на землі, коли відпустити кнопку (одиниць/сек²). Більше = різкіше")]
     public float groundDeceleration = 60f;
+
+
     [Header("Стрибок (Jump)")]
     [Tooltip("Сила, з якою гравець відштовхується від землі")]
     public float jumpForce = 12f;
@@ -19,6 +21,17 @@ public class PlayerData : ScriptableObject
     public int amountOfJumps = 2;
     [Tooltip("Множник гравітації при падінні (щоб падіння було швидшим за стрибок)")]
     public float fallGravityMultiplier = 2.5f;
+
+
+    [Header("Ривок (Dash)")]
+    [Tooltip("Швидкість під час ривка")]
+    public float dashSpeed = 20f;
+    [Tooltip("Скільки секунд триває ривок")]
+    public float dashDuration = 0.15f;
+    [Tooltip("Скільки секунд після ривка не можна зробити наступний")]
+    public float dashCooldown = 0.5f;
+
+
     [Header("Перевірки оточення (Physics Checks)")]
     [Tooltip("Радіус сфери для перевірки торкання землі")]
     public float groundCheckRadius = 0.3f;
