@@ -9,7 +9,7 @@ public class PlayerInput: MonoBehaviour
     {
         normalizedInputX = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetAxisRaw("Jump") > 0)
+        if (Input.GetButtonDown("Jump"))
         {
             JumpInput = true;
         }
