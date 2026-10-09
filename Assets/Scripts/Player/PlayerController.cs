@@ -12,14 +12,17 @@ public class PlayerController : MonoBehaviour
     public PlayerMoveState WalkState { get; private set; }
     public PlayerFallState FallState { get; private set; }
     public PlayerDashState DashState { get; private set; }
+    public PlayerDownJumpState DownJumpState { get; private set; }
 
     public Rigidbody2D Rigidbody { get; private set; }
+    private Collider2D playerCollider;
     public Transform GroundCheck; 
     public bool IsGrounded { get; private set; }
 
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
+        playerCollider = GetComponent<Collider2D>();
         InputHandler = GetComponent<PlayerInput>();
         StateMachine = new PlayerStateMachine();
 
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
         WalkState = new PlayerMoveState(this, StateMachine);
         FallState = new PlayerFallState(this, StateMachine);
         DashState = new PlayerDashState(this, StateMachine);
+        DownJumpState = new PlayerDownJumpState(this, StateMachine);
     }
 
     private void Start()
@@ -49,7 +53,12 @@ public class PlayerController : MonoBehaviour
     private void CheckIfGrounded()
     {
         // Перевіряємо, чи є в заданому радіусі об'єкти з шаром "Земля"
-        IsGrounded = Physics2D.OverlapCircle(GroundCheck.position, data.groundCheckRadius, data.whatIsGround);
+        bool groundUnderFeet = Physics2D.OverlapCircle(GroundCheck.position, data.groundCheckRadius, data.whatIsGround);
+
+        // Колайдер гравця справді торкається землі, а не проходить крізь односторонню платформу
+        bool isTouchingGround = playerCollider.IsTouchingLayers(data.whatIsGround);
+
+        IsGrounded = groundUnderFeet && isTouchingGround;
     }
     private void OnDrawGizmos()
     {
