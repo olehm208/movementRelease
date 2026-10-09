@@ -295,6 +295,7 @@ MonoBehaviour:
   - {fileID: 1805272187}
   detectionRange: 8
   stoppingDistance: 1.5
+  maxDetectionHeight: 1.5
   ledgeCheck: {fileID: 1572244114}
   wallCheck: {fileID: 1681308666}
   ledgeCheckDistance: 0.5

@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
     [Header("Detection")]
     public float detectionRange = 8f;
     public float stoppingDistance = 1.5f;
+    [Tooltip("Наскільки гравець може бути вище/нижче ворога, щоб той його помітив (щоб не бачив інші поверхи)")]
+    public float maxDetectionHeight = 1.5f;
 
     [Header("Environment Checks")]
     [Tooltip("Точка перед ворогом на рівні ніг — звідси перевіряємо, чи є земля попереду")]
@@ -25,6 +27,9 @@ public class EnemyController : MonoBehaviour
 
     private Rigidbody2D rb;
     private int patrolIndex;
+
+    // Чи вже помітив гравця (тоді бачить його і за спиною)
+    private bool isChasing;
     private PlayerController player;
 
     private void Awake()
@@ -39,7 +44,7 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (player && Vector2.Distance(transform.position, player.transform.position) <= detectionRange)
+        if (player && CanSeePlayer())
         {
             ChasePlayer(player.transform);
         }
@@ -143,6 +148,12 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
+        // Зона, в якій ворог помічає гравця попереду
+        Gizmos.color = new Color(1f, 0.5f, 0f);
+        float gizmoFacing = Mathf.Sign(transform.localScale.x);
+        Vector3 visionCenter = transform.position + Vector3.right * gizmoFacing * detectionRange / 2f;
+        Gizmos.DrawWireCube(visionCenter, new Vector3(detectionRange, maxDetectionHeight * 2f, 0f));
+
         // Промені перевірки краю і стіни
         Gizmos.color = Color.cyan;
         if (ledgeCheck != null)
@@ -153,5 +164,47 @@ public class EnemyController : MonoBehaviour
             float facing = Mathf.Sign(transform.localScale.x);
             Gizmos.DrawLine(wallCheck.position, wallCheck.position + Vector3.right * facing * wallCheckDistance);
         }
+    }
+
+
+    // Чи бачить ворог гравця: в радіусі, на своєму поверсі, без стін між ними
+    // Ще не помічений гравець має бути попереду, а вже помічений — будь-де
+    private bool CanSeePlayer()
+    {
+        Vector2 toPlayer = player.transform.position - transform.position;
+
+        // Задалеко
+        if (toPlayer.magnitude > detectionRange)
+        {
+            isChasing = false;
+            return false;
+        }
+
+        // На іншому поверсі
+        if (Mathf.Abs(toPlayer.y) > maxDetectionHeight)
+        {
+            isChasing = false;
+            return false;
+        }
+
+        // Між ворогом і гравцем стіна або платформа
+        if (Physics2D.Linecast(transform.position, player.transform.position, whatIsGround))
+        {
+            isChasing = false;
+            return false;
+        }
+
+        // Ще не помітив — бачить тільки те, що попереду
+        if (!isChasing)
+        {
+            float facing = Mathf.Sign(transform.localScale.x);
+
+            if (Mathf.Sign(toPlayer.x) != facing)
+                return false;
+
+            isChasing = true;
+        }
+
+        return true;
     }
 }
