@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   movementVelocity: 8
+  groundDeceleration: 20
   jumpForce: 6
-  amountOfJumps: 1
+  airControl: 15
+  airDeceleration: 15
+  amountOfJumps: 2
   fallGravityMultiplier: 2.5
   groundCheckRadius: 0.3
   whatIsGround:
