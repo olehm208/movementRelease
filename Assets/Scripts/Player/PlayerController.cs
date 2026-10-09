@@ -2,6 +2,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance { get; private set; }
     public PlayerStateMachine StateMachine { get; private set; }
 
     public PlayerData data;
@@ -21,6 +22,13 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
         Rigidbody = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<Collider2D>();
         InputHandler = GetComponent<PlayerInput>();
@@ -67,5 +75,10 @@ public class PlayerController : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(GroundCheck.position, data.groundCheckRadius);
         }
+    }
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
     }
 }
