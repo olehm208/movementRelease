@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public PlayerJumpState JumpState { get; private set; }
     public PlayerMoveState WalkState { get; private set; }
     public PlayerFallState FallState { get; private set; }
+    public PlayerDashState DashState { get; private set; }
 
     public Rigidbody2D Rigidbody { get; private set; }
     public Transform GroundCheck; 
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
         JumpState = new PlayerJumpState(this, StateMachine);
         WalkState = new PlayerMoveState(this, StateMachine);
         FallState = new PlayerFallState(this, StateMachine);
+        DashState = new PlayerDashState(this, StateMachine);
     }
 
     private void Start()
