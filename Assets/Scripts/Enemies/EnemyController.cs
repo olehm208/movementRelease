@@ -30,6 +30,7 @@ public class EnemyController : MonoBehaviour
 
     // Чи вже помітив гравця (тоді бачить його і за спиною)
     private bool isChasing;
+    public bool IsChasing => isChasing;
     private PlayerController player;
 
     private void Awake()
