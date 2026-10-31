@@ -22,7 +22,7 @@ public class AnimationDemoHotkeys : MonoBehaviour
         if (isDead || animations == null)
             return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
         {
             animations.PlayInteraction();
         }

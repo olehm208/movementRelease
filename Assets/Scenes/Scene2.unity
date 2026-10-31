@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4968500760461548218, guid: cd91ca8db706589f58fedb91cce70c7d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.144
+      objectReference: {fileID: 0}
     - target: {fileID: 8573304266611216786, guid: cd91ca8db706589f58fedb91cce70c7d, type: 3}
       propertyPath: Damping
       value: 0
@@ -1118,8 +1122,77 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8067801993540553576, guid: 3a64a8dae3833694ba6d28b4f209049c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1338876134}
+    - targetCorrespondingSourceObject: {fileID: 8067801993540553576, guid: 3a64a8dae3833694ba6d28b4f209049c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1338876133}
+    - targetCorrespondingSourceObject: {fileID: 8067801993540553576, guid: 3a64a8dae3833694ba6d28b4f209049c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1338876132}
   m_SourcePrefab: {fileID: 100100000, guid: 3a64a8dae3833694ba6d28b4f209049c, type: 3}
+--- !u!1 &1338876131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8067801993540553576, guid: 3a64a8dae3833694ba6d28b4f209049c, type: 3}
+  m_PrefabInstance: {fileID: 1338876130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1338876132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338876131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d80b47609c2f67eb4a7c61c8d8051e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationPresenter
+  animationAPI: {fileID: 1338876133}
+  movementThreshold: 0.05
+--- !u!114 &1338876133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338876131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35283f643303b9d1285e0c06a92f47db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterAnimationAPI
+  animator: {fileID: 1338876134}
+  onInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+  onHurt:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!95 &1338876134
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338876131}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5a54308b5e074a418b3e34d398ceff5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1408791385
 GameObject:
   m_ObjectHideFlags: 0
